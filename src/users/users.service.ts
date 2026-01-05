@@ -39,7 +39,7 @@ export class UsersService {
   async signIn(
     email: string,
     password: string,
-  ): Promise<{ token: string; name: string; userId: string }> {
+  ): Promise<{ token: string; name: string; userId: string; image: string }> {
     const user = await this.userModel.findOne({ email }).exec();
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -56,7 +56,12 @@ export class UsersService {
     user.token = token;
     await user.save();
 
-    return { token, name: user.name, userId: user._id.toString() };
+    return {
+      token,
+      name: user.name,
+      userId: user._id.toString(),
+      image: user?.profile_image,
+    };
   }
 
   async updateProfile(
@@ -79,7 +84,9 @@ export class UsersService {
 
       user.name = name;
       user.email = email;
-      user.profile_image = imageUrl;
+      if (imageUrl) {
+        user.profile_image = imageUrl;
+      }
 
       const updatedUser = await user.save();
 

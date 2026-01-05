@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Orders extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, ref: 'Products' })
   product_id: string;
 
   @Prop({ required: true })

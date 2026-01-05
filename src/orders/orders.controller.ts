@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -38,6 +39,16 @@ export class OrdersController {
       throw new error();
     }
   }
+
+  @Delete('deleteOrder/:id')
+  deleteOrderById(@Param('id') id: string) {
+    try {
+      return this.orderService?.deleteOrderById(id);
+    } catch (error) {
+      throw new error();
+    }
+  }
+
   @Post('createOrder')
   async createOrder(@Body() body: CreateOrderDTO) {
     const order = await this.orderService.CreateOrder(body);

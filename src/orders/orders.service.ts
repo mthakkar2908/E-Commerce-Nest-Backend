@@ -15,11 +15,15 @@ export class OrdersService {
   ) {}
 
   async getAllOrders(): Promise<Orders[]> {
-    return this.orderModel.find().exec();
+    return this.orderModel.find().populate('product_id').exec();
   }
 
   async getOrdersById(id: string): Promise<Orders | null> {
-    return this.orderModel.findById(id).exec();
+    return this.orderModel.findById(id).populate('product_id').exec();
+  }
+
+  async deleteOrderById(id: string): Promise<Orders | null> {
+    return this.orderModel.findByIdAndDelete(id).populate('product_id').exec();
   }
 
   async CreateOrder(createOrder: CreateOrderDTO): Promise<Orders> {
