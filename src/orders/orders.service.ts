@@ -60,7 +60,7 @@ export class OrdersService {
 
   async searchOrders(search: string): Promise<Orders[]> {
     if (!search || !search.trim()) {
-      return this.orderModel.find().exec();
+      return this.orderModel.find().populate('product_id').exec();
     }
 
     const orConditions: Record<string, unknown>[] = [
