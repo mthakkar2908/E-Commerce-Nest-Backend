@@ -16,9 +16,12 @@ export class CartService {
     @InjectModel(Products.name) private productModel: Model<Products>,
   ) {}
 
-  async getCart(userId: string) {
-    console.log('Fetching cart for user:', userId);
-    return this.cartModel.findById(userId).populate('items.productId');
+  async getCart() {
+    return this.cartModel.find();
+  }
+
+  async getCartById(userId: string) {
+    return this.cartModel.findById(userId);
   }
 
   async addToCart(userId: string, dto: AddMultiplsCarts) {

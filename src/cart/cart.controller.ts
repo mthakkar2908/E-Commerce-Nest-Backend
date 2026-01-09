@@ -6,9 +6,14 @@ import { AddMultiplsCarts, AddQuantityDTO } from './create-cart.dto';
 export class CartController {
   constructor(private cartService: CartService) {}
 
-  @Get(':userId')
-  getCart(@Param('userId') userId: string) {
-    return this.cartService.getCart(userId);
+  @Get()
+  getCart() {
+    return this.cartService.getCart();
+  }
+
+  @Get(':cartId')
+  getCartDataById(@Param('cartId') cartId: string) {
+    return this.cartService.getCartById(cartId);
   }
 
   @Post(':userId/add')

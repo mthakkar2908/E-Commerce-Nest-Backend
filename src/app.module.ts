@@ -17,6 +17,7 @@ import { EmailSignupModule } from './email-signup/email-signup.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PrivacyPolicyModule } from './Privacy-Policy/privacy.module';
 import { TermsConditionsModule } from './terms-conditions/terms.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { TermsConditionsModule } from './terms-conditions/terms.module';
     EmailSignupModule,
     PrivacyPolicyModule,
     TermsConditionsModule,
+    ContactModule,
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
