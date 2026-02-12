@@ -10,8 +10,28 @@ export class ProductService {
     @InjectModel(Products.name) private productModel: Model<Products>,
   ) {}
 
-  async findAllProducts(): Promise<Products[]> {
-    return this.productModel.find().exec();
+  async findAllProducts(
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: Products[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+
+    const [products, total] = await Promise.all([
+      this.productModel.find().skip(skip).limit(pageSize).exec(),
+      this.productModel.countDocuments(),
+    ]);
+
+    return {
+      data: products,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async fineProductById(id: string): Promise<Products | null> {

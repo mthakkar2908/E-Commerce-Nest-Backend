@@ -18,6 +18,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PrivacyPolicyModule } from './Privacy-Policy/privacy.module';
 import { TermsConditionsModule } from './terms-conditions/terms.module';
 import { ContactModule } from './contact/contact.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ContactModule } from './contact/contact.module';
       envFilePath: '.env.development',
     }),
     OrdersModule,
+    ChatModule,
     CartModule,
     EmailSignupModule,
     PrivacyPolicyModule,

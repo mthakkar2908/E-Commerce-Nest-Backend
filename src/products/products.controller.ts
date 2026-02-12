@@ -22,19 +22,22 @@ export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  findAllProducts() {
+  async findAllProducts(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ) {
     try {
-      return this.productService.findAllProducts();
-    } catch (error) {
+      return await this.productService.findAllProducts(
+        Number(page),
+        Number(pageSize),
+      );
+    } catch {
       throw new HttpException(
         {
-          status: HttpStatus.FORBIDDEN,
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: 'Internal Error',
         },
-        HttpStatus.FORBIDDEN,
-        {
-          cause: error,
-        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
