@@ -19,6 +19,8 @@ import { PrivacyPolicyModule } from './Privacy-Policy/privacy.module';
 import { TermsConditionsModule } from './terms-conditions/terms.module';
 import { ContactModule } from './contact/contact.module';
 import { ChatModule } from './chat/chat.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -29,6 +31,10 @@ import { ChatModule } from './chat/chat.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env.development',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
     }),
     OrdersModule,
     ChatModule,

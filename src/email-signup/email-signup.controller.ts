@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Get, Query } from '@nestjs/common';
 import { EmailSignupService } from './email-signup.service';
 import { CreateEmailSignupDto } from './dto/create-email-signup.dto';
 
@@ -9,5 +9,15 @@ export class EmailSignupController {
   @Post()
   create(@Body() dto: CreateEmailSignupDto) {
     return this.emailSignupService.create(dto);
+  }
+
+  @Get('get-emails')
+  find(@Query('userId') userId: string) {
+    return this.emailSignupService.findByUserId(userId);
+  }
+
+  @Delete('unSubscribe')
+  delete(@Body() dto: CreateEmailSignupDto) {
+    return this.emailSignupService.delete(dto);
   }
 }
