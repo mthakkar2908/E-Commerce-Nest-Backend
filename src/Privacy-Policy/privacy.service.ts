@@ -11,18 +11,29 @@ export class PrivacyPolicyService {
     private readonly privacyModel: Model<PrivacyPolicy>,
   ) {}
 
-  async create(privacyDTO: PrivacyPolicyDTO) {
+  async createOrUpdate(privacyDTO: PrivacyPolicyDTO) {
     const { PrivacyPolicyText } = privacyDTO;
 
-    const savedPrivacyText = await this.privacyModel.create({
+    const existingPrivacy = await this.privacyModel.findOne();
+
+    if (existingPrivacy) {
+      existingPrivacy.PrivacyPolicyText = PrivacyPolicyText;
+      await existingPrivacy.save();
+
+      return {
+        message: 'Privacy Policy updated successfully',
+        data: existingPrivacy,
+      };
+    }
+
+    const newPrivacy = await this.privacyModel.create({
       PrivacyPolicyText,
     });
 
-    if (savedPrivacyText)
-      return {
-        message: 'Text Added successfully',
-        data: savedPrivacyText,
-      };
+    return {
+      message: 'Privacy Policy created successfully',
+      data: newPrivacy,
+    };
   }
 
   async getPrivacyText() {

@@ -15,6 +15,9 @@ export class PostsService {
   async findAll(): Promise<Post[]> {
     return this.postModel.find().exec();
   }
+  async getTotalPosts(): Promise<number> {
+    return this.postModel.find().countDocuments();
+  }
 
   async findOne(id: string): Promise<Post | null> {
     return this.postModel.findById(id).exec();

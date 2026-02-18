@@ -8,7 +8,7 @@ export class PrivacyPolicyController {
 
   @Post()
   create(@Body() dto: PrivacyPolicyDTO) {
-    return this.privacyPolicyService.create(dto);
+    return this.privacyPolicyService.createOrUpdate(dto);
   }
 
   @Get('/getText')

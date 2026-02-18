@@ -8,7 +8,7 @@ export class TermsConditionsController {
 
   @Post()
   create(@Body() dto: TermsConditionsDTO) {
-    return this.termsConditionService.create(dto);
+    return this.termsConditionService.createOrUpdate(dto);
   }
 
   @Get('/getText')

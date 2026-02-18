@@ -22,7 +22,12 @@ export class ProductService {
     const skip = (page - 1) * pageSize;
 
     const [products, total] = await Promise.all([
-      this.productModel.find().skip(skip).limit(pageSize).exec(),
+      this.productModel
+        .find()
+        .sort({ order: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .exec(),
       this.productModel.countDocuments(),
     ]);
 
@@ -34,6 +39,9 @@ export class ProductService {
     };
   }
 
+  async getTotalProducts(): Promise<number> {
+    return this.productModel.find().countDocuments();
+  }
   async fineProductById(id: string): Promise<Products | null> {
     return this.productModel.findById(id).exec();
   }

@@ -11,18 +11,29 @@ export class TermsConditionsService {
     private readonly termsModel: Model<TermsConditions>,
   ) {}
 
-  async create(termsDTO: TermsConditionsDTO) {
+  async createOrUpdate(termsDTO: TermsConditionsDTO) {
     const { TermsConditionsText } = termsDTO;
+
+    const existingTermsData = await this.termsModel.findOne();
+
+    if (existingTermsData) {
+      existingTermsData.TermsConditionsText = TermsConditionsText;
+      await existingTermsData.save();
+
+      return {
+        message: 'Terms & Condition data updated.',
+        data: existingTermsData,
+      };
+    }
 
     const savedTermsText = await this.termsModel.create({
       TermsConditionsText,
     });
 
-    if (savedTermsText)
-      return {
-        message: 'Text Added successfully',
-        data: savedTermsText,
-      };
+    return {
+      message: 'Text Added successfully',
+      data: savedTermsText,
+    };
   }
 
   async getTermsData() {

@@ -30,6 +30,7 @@ import { extname } from 'path';
   ],
   controllers: [PostsController],
   providers: [PostsService],
+  exports: [PostsService],
 })
 export class PostsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

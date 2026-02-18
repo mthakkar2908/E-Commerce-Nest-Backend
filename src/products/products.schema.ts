@@ -17,6 +17,9 @@ export class Products extends Document {
 
   @Prop({ required: false })
   is_fav: boolean;
+
+  @Prop({ required: true, default: 0 })
+  order: number;
 }
 
 export const ProductsSchema = SchemaFactory.createForClass(Products);
