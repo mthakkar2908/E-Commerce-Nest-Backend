@@ -30,8 +30,6 @@ export class AdminService {
 
     const payload = { sub: admin._id, email: admin.email };
     const token = await this.jwtService.signAsync(payload);
-    console.log('Token', token);
-
     admin.token = token;
     await admin.save();
 

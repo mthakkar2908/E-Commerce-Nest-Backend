@@ -29,6 +29,20 @@ export class UsersService {
   async findOne(id: string): Promise<User | null> {
     return this.userModel.findById(id).exec();
   }
+  async deleteUser(
+    id: string,
+  ): Promise<{ message: string; deletedUser: User | null }> {
+    if (!id) {
+      throw new BadRequestException('Id is required to perform this action');
+    }
+
+    const deletedUser = await this.userModel.findByIdAndDelete(id).exec();
+
+    return {
+      message: 'User Deleted',
+      deletedUser,
+    };
+  }
 
   async create(
     name: string | undefined,

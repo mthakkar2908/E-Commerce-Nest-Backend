@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
+  Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './create-user.dto';
@@ -27,6 +28,11 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
+  }
+
+  @Delete(':id')
+  findAndDelete(@Param('id') id: string) {
+    return this.usersService.deleteUser(id);
   }
 
   @Post()
