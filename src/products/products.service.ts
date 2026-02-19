@@ -46,6 +46,20 @@ export class ProductService {
     return this.productModel.findById(id).exec();
   }
 
+  async deleteProduct(
+    id: string,
+  ): Promise<{ message: string; deleteProduct: Products | null }> {
+    if (!id) {
+      throw new BadRequestException('Id is required to perform this action');
+    }
+
+    const deleteProduct = await this.productModel.findByIdAndDelete(id).exec();
+
+    return {
+      message: 'Product Deleted',
+      deleteProduct,
+    };
+  }
   async CreateProduct(
     name: string,
     about_product: string,

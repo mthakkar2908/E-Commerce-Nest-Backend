@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { User } from 'src/users/user.schema';
 
 @Schema()
 export class EmailSignup extends Document {
-  @Prop({ required: true })
-  userId: string;
+  @Prop({ type: Types.ObjectId, ref: User.name })
+  userId: User | Types.ObjectId;
 
   @Prop({ required: false })
   email: string;

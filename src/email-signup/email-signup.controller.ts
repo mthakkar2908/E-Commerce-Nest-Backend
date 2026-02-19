@@ -11,6 +11,11 @@ export class EmailSignupController {
     return this.emailSignupService.create(dto);
   }
 
+  @Get()
+  findAll() {
+    return this.emailSignupService.findAll();
+  }
+
   @Get('get-emails')
   find(@Query('userId') userId: string) {
     return this.emailSignupService.findByUserId(userId);

@@ -13,7 +13,10 @@ export class PostsService {
   ) {}
 
   async findAll(): Promise<Post[]> {
-    return this.postModel.find().exec();
+    return this.postModel
+      .find()
+      .populate('user', 'name email profile_image')
+      .exec();
   }
   async getTotalPosts(): Promise<number> {
     return this.postModel.find().countDocuments();

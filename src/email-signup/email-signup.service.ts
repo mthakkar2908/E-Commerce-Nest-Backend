@@ -52,6 +52,13 @@ export class EmailSignupService {
     };
   }
 
+  async findAll(): Promise<EmailSignup[]> {
+    return this.emailSignupModel
+      .find()
+      .populate('userId', 'name email profile_image')
+      .exec();
+  }
+
   async create(createEmailSignupDto: CreateEmailSignupDto) {
     const { email, userId } = createEmailSignupDto;
 

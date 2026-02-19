@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -63,6 +64,11 @@ export class ProductsController {
         },
       );
     }
+  }
+
+  @Delete(':id')
+  findAndDelete(@Param('id') id: string) {
+    return this.productService.deleteProduct(id);
   }
 
   @Post('createProduct')
