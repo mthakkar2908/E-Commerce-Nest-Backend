@@ -7,8 +7,8 @@ export class EmailSignupController {
   constructor(private readonly emailSignupService: EmailSignupService) {}
 
   @Post()
-  create(@Body() dto: CreateEmailSignupDto) {
-    return this.emailSignupService.create(dto);
+  create(@Body() dto: CreateEmailSignupDto, @Query('type') type?: string) {
+    return this.emailSignupService.create(dto, type);
   }
 
   @Get()
