@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
 import { TermsConditionsService } from './terms.service';
 import { TermsConditionsDTO } from './terms.dto';
 
@@ -14,5 +14,10 @@ export class TermsConditionsController {
   @Get('/getText')
   getTermsText() {
     return this?.termsConditionService?.getTermsData();
+  }
+
+  @Delete('/delete-terms/:id')
+  deleteTerms(@Param('id') id: string) {
+    return this.termsConditionService.deleteTerms(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
 import { PrivacyPolicyService } from './privacy.service';
 import { PrivacyPolicyDTO } from './privacy.dto';
 
@@ -14,5 +14,10 @@ export class PrivacyPolicyController {
   @Get('/getText')
   getPrivacyText() {
     return this?.privacyPolicyService?.getPrivacyText();
+  }
+
+  @Delete('/delete-privacy/:id')
+  deletePrivacy(@Param('id') id: string) {
+    return this.privacyPolicyService.deletePrivacy(id);
   }
 }

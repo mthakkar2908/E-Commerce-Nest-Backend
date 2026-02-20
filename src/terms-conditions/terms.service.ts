@@ -40,4 +40,9 @@ export class TermsConditionsService {
     const termsData = await this.termsModel.find();
     return termsData;
   }
+
+  async deleteTerms(id: string) {
+    const deletedTerms = await this.termsModel.findByIdAndDelete(id);
+    return { message: 'Terms & Condition data deleted', deletedTerms };
+  }
 }

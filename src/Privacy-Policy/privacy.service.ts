@@ -40,4 +40,9 @@ export class PrivacyPolicyService {
     const privacyData = await this.privacyModel.find();
     return privacyData;
   }
+
+  async deletePrivacy(id: string) {
+    const deletedPrivacy = await this.privacyModel.findByIdAndDelete(id);
+    return { message: 'Privacy Policy Deleted', deletedPrivacy };
+  }
 }
