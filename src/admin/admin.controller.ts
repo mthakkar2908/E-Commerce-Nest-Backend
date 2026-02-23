@@ -5,6 +5,8 @@ import { SignInAdminDTO } from './dto/sign-in.dto';
 import { UsersService } from 'src/users/users.service';
 import { ProductService } from 'src/products/products.service';
 import { PostsService } from 'src/posts/posts.service';
+import { OrdersService } from 'src/orders/orders.service';
+import { ContactService } from 'src/contact/contact.service';
 
 @Controller('admin')
 export class AdminController {
@@ -13,6 +15,8 @@ export class AdminController {
     private readonly userService: UsersService,
     private readonly productService: ProductService,
     private readonly postService: PostsService,
+    private readonly orderService: OrdersService,
+    private readonly contactService: ContactService,
   ) {}
 
   @Post()
@@ -38,11 +42,15 @@ export class AdminController {
     const total = await this.userService.getTotalUsers();
     const totalProducts = await this.productService.getTotalProducts();
     const totalPosts = await this.postService.getTotalPosts();
+    const totalOrders = await this.orderService.getTotalOrders();
+    const totalContactForms = await this.contactService.getTotalContactForms();
 
     return {
       totalUsers: total,
       totalProducts: totalProducts,
       totalPosts: totalPosts,
+      totalOrders: totalOrders,
+      totalContactForms: totalContactForms,
     };
   }
 }

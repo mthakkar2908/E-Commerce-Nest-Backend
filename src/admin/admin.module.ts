@@ -8,6 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from 'src/users/users.module';
 import { ProductsModule } from 'src/products/products.module';
 import { PostsModule } from 'src/posts/posts.module';
+import { OrdersModule } from 'src/orders/orders.module';
+import { ContactModule } from 'src/contact/contact.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { PostsModule } from 'src/posts/posts.module';
     UsersModule,
     ProductsModule,
     PostsModule,
+    OrdersModule,
+    ContactModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

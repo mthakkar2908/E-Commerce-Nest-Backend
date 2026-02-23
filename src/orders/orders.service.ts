@@ -18,6 +18,10 @@ export class OrdersService {
     return this.orderModel.find().populate('product_id').exec();
   }
 
+  async getTotalOrders(): Promise<number> {
+    return this.orderModel.find().countDocuments();
+  }
+
   async getOrdersById(id: string): Promise<Orders | null> {
     return this.orderModel.findById(id).populate('product_id').exec();
   }
@@ -77,6 +81,9 @@ export class OrdersService {
       );
     }
 
-    return this.orderModel.find({ $or: orConditions }).exec();
+    return this.orderModel
+      .find({ $or: orConditions })
+      .populate('product_id')
+      .exec();
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
 import { ContactDTO } from './contact.dto';
 import { ContactService } from './contact.service';
 @Controller('contact')
@@ -8,5 +8,15 @@ export class ContactController {
   @Post('/form')
   create(@Body() dto: ContactDTO) {
     return this.contactService.create(dto);
+  }
+
+  @Get('/form')
+  getContactForms() {
+    return this.contactService.getContactForms();
+  }
+
+  @Delete('/deleteContact/:id')
+  deleteContactForm(@Param('id') id: string) {
+    return this.contactService.deleteContactForm(id);
   }
 }

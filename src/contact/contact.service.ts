@@ -39,6 +39,22 @@ export class ContactService {
     });
   }
 
+  async getTotalContactForms(): Promise<number> {
+    return this.contactModel.find().countDocuments();
+  }
+
+  async getContactForms(): Promise<Contact[]> {
+    return this.contactModel.find().exec();
+  }
+
+  async deleteContactForm(id: string): Promise<{
+    message: string;
+    deletedContact: Contact | null;
+  }> {
+    const deletedContact = await this.contactModel.findByIdAndDelete(id);
+    return { message: 'Contact Form Deleted Successfully', deletedContact };
+  }
+
   async create(contactDTO: ContactDTO) {
     const { name, email, title, mobile_no, description } = contactDTO;
 

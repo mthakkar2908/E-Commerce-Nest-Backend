@@ -43,9 +43,6 @@ export class ChatService {
     );
   }
 
-  /**
-   * Add reaction to message
-   */
   async addReaction(
     messageId: string,
     emoji: string,
@@ -63,7 +60,6 @@ export class ChatService {
       reactionsMap[emoji] = [];
     }
 
-    // Avoid duplicate reactions from same user
     if (!reactionsMap[emoji].includes(userId)) {
       reactionsMap[emoji].push(userId);
     }
@@ -71,10 +67,6 @@ export class ChatService {
     message.reactions = reactionsMap;
     return message.save();
   }
-
-  /**
-   * Remove reaction from message
-   */
   async removeReaction(
     messageId: string,
     emoji: string,
