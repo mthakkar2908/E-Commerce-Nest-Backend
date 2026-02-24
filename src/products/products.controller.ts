@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { CreateProductDTO } from './create-product.dto';
-import { UpateProductDTO } from './updateProduct.dto';
+import { AddProductQuanDto, UpateProductDTO } from './updateProduct.dto';
 import { Products } from './products.schema';
 
 @Controller('products')
@@ -41,6 +41,10 @@ export class ProductsController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+  @Put('addQuan')
+  async updateQuan(@Body() body: AddProductQuanDto) {
+    return this.productService.addProductQuan(body.productId, body.quantity);
   }
 
   @Get('searchProducts')

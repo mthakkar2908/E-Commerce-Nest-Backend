@@ -135,4 +135,27 @@ export class ProductService {
       is_fav: product.is_fav,
     };
   }
+
+  async addProductQuan(productId: string, quantity: number) {
+    if (!productId) {
+      throw new BadRequestException('Product ID required.');
+    }
+
+    const product = await this.productModel.findById(productId);
+
+    if (!product) {
+      throw new BadRequestException('Product not found');
+    }
+
+    if (!quantity) {
+      throw new BadRequestException('Quantity is required');
+    }
+
+    product.quan += quantity;
+    await product.save();
+
+    return {
+      message: 'Quantity Added!',
+    };
+  }
 }

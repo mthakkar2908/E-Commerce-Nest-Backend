@@ -23,33 +23,39 @@ export class CartService {
   async getCartById(userId: string) {
     return this.cartModel.findById(userId);
   }
-
   async addToCart(userId: string, dto: AddMultiplsCarts) {
     const productPromises = dto.items.map((item) =>
       this.productModel.findById(item.productId),
     );
+
     const products = await Promise.all(productPromises);
 
     if (products.some((p) => !p)) {
       throw new NotFoundException('One or more products not found');
     }
 
-    dto.items.forEach((item, index) => {
-      const product = products[index];
-      if (product?.quan) {
-        if (item.quantity > product.quan) {
-          throw new BadRequestException(
-            `Product ${product?.id} has only ${product?.quan} in stock, but you requested ${item.quantity}`,
-          );
-        }
-      }
-    });
     let cart = await this.cartModel.findOne({ userId });
+
     if (!cart) {
       cart = new this.cartModel({ userId, items: [] });
     }
 
-    dto.items.forEach((item) => {
+    for (const item of dto.items) {
+      const updatedProduct = await this.productModel.findOneAndUpdate(
+        {
+          _id: item.productId,
+          quan: { $gte: item.quantity },
+        },
+        {
+          $inc: { quan: -item.quantity },
+        },
+        { new: true },
+      );
+
+      if (!updatedProduct) {
+        throw new BadRequestException(`Not enough stock available`);
+      }
+
       const index = cart.items.findIndex(
         (i) => i.productId.toString() === item.productId,
       );
@@ -62,7 +68,7 @@ export class CartService {
           quantity: item.quantity,
         });
       }
-    });
+    }
 
     return cart.save();
   }
