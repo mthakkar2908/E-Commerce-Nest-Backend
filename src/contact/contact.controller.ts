@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Param, Query } from '@nestjs/common';
 import { ContactDTO } from './contact.dto';
 import { ContactService } from './contact.service';
 @Controller('contact')
@@ -13,6 +13,11 @@ export class ContactController {
   @Get('/form')
   getContactForms() {
     return this.contactService.getContactForms();
+  }
+
+  @Get('search')
+  async search(@Query('q') query: string) {
+    return this.contactService.searchContacts(query);
   }
 
   @Delete('/deleteContact/:id')

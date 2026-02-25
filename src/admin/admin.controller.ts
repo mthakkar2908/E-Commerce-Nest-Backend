@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDTO } from './dto/create-admin.dto';
 import { SignInAdminDTO } from './dto/sign-in.dto';
@@ -52,5 +60,10 @@ export class AdminController {
       totalOrders: totalOrders,
       totalContactForms: totalContactForms,
     };
+  }
+
+  @Post('logout')
+  async logout(@Body() body: { email: string }) {
+    return this.adminService.logout(body.email);
   }
 }

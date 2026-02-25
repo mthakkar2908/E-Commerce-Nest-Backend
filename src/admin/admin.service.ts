@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Admin } from './admin.schema';
 import { Model } from 'mongoose';
@@ -34,5 +38,20 @@ export class AdminService {
     await admin.save();
 
     return { token, adminId: admin._id.toString(), email: admin.email };
+  }
+
+  async logout(email: string) {
+    const admin = await this.adminModel.findOne({ email });
+
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    admin.token = undefined;
+    await admin.save();
+
+    return {
+      message: 'Admin logged out successfully',
+    };
   }
 }

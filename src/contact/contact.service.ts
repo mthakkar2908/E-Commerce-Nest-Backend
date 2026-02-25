@@ -47,6 +47,22 @@ export class ContactService {
     return this.contactModel.find().exec();
   }
 
+  async searchContacts(search: string): Promise<Contact[]> {
+    if (!search) {
+      return this.contactModel.find().exec();
+    }
+
+    return this.contactModel.find({
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { title: { $regex: search, $options: 'i' } },
+        { mobile_no: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ],
+    });
+  }
+
   async deleteContactForm(id: string): Promise<{
     message: string;
     deletedContact: Contact | null;
