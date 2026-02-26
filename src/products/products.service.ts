@@ -46,7 +46,7 @@ export class ProductService {
     return this.productModel.findById(id).exec();
   }
 
-   async getLastProduct() {
+  async getLastProduct() {
     return this.productModel.findOne().sort({ createdAt: -1 }).exec();
   }
 
