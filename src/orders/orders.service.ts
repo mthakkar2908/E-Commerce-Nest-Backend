@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { CreateOrderDTO } from './create-order.dto';
 import { User } from 'src/users/user.schema';
 import { Products } from 'src/products/products.schema';
+import { Admin } from 'src/admin/admin.schema';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectModel(Orders.name) private orderModel: Model<Orders>,
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Admin.name) private adminModel: Model<Admin>,
     @InjectModel(Products.name) private productModel: Model<Products>,
   ) {}
 
@@ -21,7 +23,9 @@ export class OrdersService {
   async getTotalOrders(): Promise<number> {
     return this.orderModel.find().countDocuments();
   }
-
+  async getLastOrder() {
+    return this.orderModel.findOne().sort({ createdAt: -1 }).exec();
+  }
   async getOrdersById(id: string): Promise<Orders | null> {
     return this.orderModel.findById(id).populate('product_id').exec();
   }
@@ -32,8 +36,12 @@ export class OrdersService {
 
   async CreateOrder(createOrder: CreateOrderDTO): Promise<Orders> {
     const user = await this.userModel.findById(createOrder.user_id);
+    const admin = await this.adminModel.findById(createOrder.user_id);
 
-    if (!user) {
+    console.log('user ', user);
+    console.log('admin', admin);
+
+    if (!user && !admin) {
       throw new BadRequestException('User Not found');
     }
     const Product = await this.productModel.findById(createOrder.product_id);

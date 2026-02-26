@@ -115,18 +115,18 @@ export class EmailSignupService {
   async create(createEmailSignupDto: CreateEmailSignupDto, type?: string) {
     const { email, userId } = createEmailSignupDto;
 
+    const existingEmail = await this.emailSignupModel.findOne({ email });
+
+    if (existingEmail) {
+      throw new ConflictException('Email already subscribed');
+    }
+
     if (type === 'invite') {
       await this.sendInviteMail(email);
 
       return {
         message: 'Invitation email sent successfully',
       };
-    }
-
-    const existingEmail = await this.emailSignupModel.findOne({ email });
-
-    if (existingEmail) {
-      throw new ConflictException('Email already subscribed');
     }
 
     if (!userId) {

@@ -47,6 +47,10 @@ export class ContactService {
     return this.contactModel.find().exec();
   }
 
+  async getLastContact() {
+    return this.contactModel.findOne().sort({ createdAt: -1 }).exec();
+  }
+
   async searchContacts(search: string): Promise<Contact[]> {
     if (!search) {
       return this.contactModel.find().exec();

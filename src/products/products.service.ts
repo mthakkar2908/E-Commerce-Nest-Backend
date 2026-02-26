@@ -46,6 +46,10 @@ export class ProductService {
     return this.productModel.findById(id).exec();
   }
 
+   async getLastProduct() {
+    return this.productModel.findOne().sort({ createdAt: -1 }).exec();
+  }
+
   async deleteProduct(
     id: string,
   ): Promise<{ message: string; deleteProduct: Products | null }> {

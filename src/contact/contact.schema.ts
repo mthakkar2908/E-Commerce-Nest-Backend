@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Contact extends Document {
   @Prop({ required: true })
   name: string;
@@ -17,6 +17,9 @@ export class Contact extends Document {
 
   @Prop({ required: true })
   description: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const ContactSchema = SchemaFactory.createForClass(Contact);

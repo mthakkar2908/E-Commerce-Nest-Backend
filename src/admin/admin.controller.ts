@@ -16,6 +16,11 @@ import { PostsService } from 'src/posts/posts.service';
 import { OrdersService } from 'src/orders/orders.service';
 import { ContactService } from 'src/contact/contact.service';
 
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 @Controller('admin')
 export class AdminController {
   constructor(
@@ -52,6 +57,11 @@ export class AdminController {
     const totalPosts = await this.postService.getTotalPosts();
     const totalOrders = await this.orderService.getTotalOrders();
     const totalContactForms = await this.contactService.getTotalContactForms();
+    const lastUser = await this.userService.getLastUser();
+    const lastOrder = await this.orderService.getLastOrder();
+    const lastPost = await this.postService.getLastPosts();
+    const lastContact = await this.contactService.getLastContact();
+    const lastProduct = await this.productService.getLastProduct();
 
     return {
       totalUsers: total,
@@ -59,6 +69,15 @@ export class AdminController {
       totalPosts: totalPosts,
       totalOrders: totalOrders,
       totalContactForms: totalContactForms,
+      lastUserAdded: lastUser ? dayjs(lastUser.createdAt).fromNow() : null,
+      lastOrderAdded: lastOrder ? dayjs(lastOrder.createdAt).fromNow() : null,
+      lastPostAdded: lastPost ? dayjs(lastPost.createdAt).fromNow() : null,
+      lastContactAdded: lastContact
+        ? dayjs(lastContact.createdAt).fromNow()
+        : null,
+      lastProductAdded: lastProduct
+        ? dayjs(lastProduct.createdAt).fromNow()
+        : null,
     };
   }
 

@@ -21,6 +21,9 @@ export class PostsService {
   async getTotalPosts(): Promise<number> {
     return this.postModel.find().countDocuments();
   }
+  async getLastPosts() {
+    return this.postModel.findOne().sort({ createdAt: -1 }).exec();
+  }
 
   async findOne(id: string): Promise<Post | null> {
     return this.postModel.findById(id).exec();

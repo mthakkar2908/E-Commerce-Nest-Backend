@@ -5,12 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Orders, OrderSchema } from './orders.schema';
 import { User, UserSchema } from 'src/users/user.schema';
 import { Products, ProductsSchema } from 'src/products/products.schema';
+import { Admin, AdminSchema } from 'src/admin/admin.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Orders.name, schema: OrderSchema },
       { name: User.name, schema: UserSchema },
+      { name: Admin.name, schema: AdminSchema },
       { name: Products.name, schema: ProductsSchema },
     ]),
   ],

@@ -29,6 +29,10 @@ export class UsersService {
   async findOne(id: string): Promise<User | null> {
     return this.userModel.findById(id).exec();
   }
+
+  async getLastUser() {
+    return this.userModel.findOne().sort({ createdAt: -1 }).exec();
+  }
   async deleteUser(
     id: string,
   ): Promise<{ message: string; deletedUser: User | null }> {

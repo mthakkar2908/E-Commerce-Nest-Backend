@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { User } from 'src/users/user.schema';
 
-@Schema()
+@Schema({ timestamps : true})
 export class Post extends Document {
   @Prop({ required: true })
   name: string;
@@ -18,6 +18,9 @@ export class Post extends Document {
 
   @Prop({ type: Types.ObjectId, ref: User.name })
   user: User | Types.ObjectId;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
