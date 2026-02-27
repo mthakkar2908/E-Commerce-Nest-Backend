@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact } from './contact.schema';
@@ -95,5 +99,34 @@ export class ContactService {
         message: 'Contact form saved successfully',
         data: savedContact,
       };
+  }
+
+  async update(contactDTO: ContactDTO) {
+    const { id, name, email, title, mobile_no, description } = contactDTO;
+
+    if (!id) {
+      throw new BadRequestException('ID is required to perform this action.');
+    }
+
+    const updatedContact = await this.contactModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        title,
+        mobile_no,
+        description,
+      },
+      { new: true },
+    );
+
+    if (!updatedContact) {
+      throw new NotFoundException('Contact not found');
+    }
+
+    return {
+      message: 'Contact Data Updated Successfully',
+      data: updatedContact,
+    };
   }
 }

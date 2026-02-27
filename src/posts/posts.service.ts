@@ -159,24 +159,30 @@ export class PostsService {
       throw new BadRequestException('Invalid post id');
     }
 
-    const user = await this.userModel.findById(userId);
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const imageUrl = image ? `/uploads/${image.filename}` : null;
-
-    const updatedPost = await this.postModel.findByIdAndUpdate(
-      id,
-      { $set: { user: userId, name, post_description, email, imageUrl } },
-      { new: true },
-    );
-
-    if (!updatedPost) {
+    const post = await this.postModel.findById(id);
+    if (!post) {
       throw new BadRequestException('Post not found');
     }
 
-    return updatedPost;
+    const updateData: any = {
+      user: userId,
+      name,
+      post_description,
+      email,
+    };
+
+    // 🔥 Only update image if new file uploaded
+    if (image) {
+      updateData.imageUrl = `/uploads/${image.filename}`;
+    }
+
+    const updatedPost = await this.postModel.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true },
+    );
+
+    return updatedPost!;
   }
 
   async getPosts() {

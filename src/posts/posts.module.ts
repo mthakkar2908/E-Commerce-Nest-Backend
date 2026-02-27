@@ -22,7 +22,7 @@ import { Admin, AdminSchema } from 'src/admin/admin.schema';
     MulterModule.register({
       storage: diskStorage({
         destination: './uploads',
-        filename: (file, cb) => {
+        filename: (req, file, cb) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, uniqueSuffix + extname(file.originalname));

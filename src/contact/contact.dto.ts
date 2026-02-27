@@ -1,6 +1,10 @@
-import { IsEmail, IsMobilePhone, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsMobilePhone, IsMongoId, IsNotEmpty } from 'class-validator';
+import { isValidObjectId } from 'mongoose';
 
 export class ContactDTO {
+  @IsMongoId()
+  id?: string;
+
   @IsNotEmpty()
   name: string;
 

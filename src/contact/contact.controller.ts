@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ContactDTO } from './contact.dto';
 import { ContactService } from './contact.service';
@@ -16,6 +17,11 @@ export class ContactController {
   @Post('/form')
   create(@Body() dto: ContactDTO) {
     return this.contactService.create(dto);
+  }
+
+  @Put('updateContact')
+  update(@Body() dto: ContactDTO) {
+    return this.contactService.update(dto);
   }
 
   @Get('/form')

@@ -79,7 +79,7 @@ export class PostsController {
     );
   }
 
-  @Post('update/:id')
+  @Post('updatePost/:id')
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
