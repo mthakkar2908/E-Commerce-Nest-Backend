@@ -10,17 +10,19 @@ import { User, UserSchema } from 'src/users/user.schema';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { Admin, AdminSchema } from 'src/admin/admin.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Post.name, schema: PostSchema },
       { name: User.name, schema: UserSchema },
+      { name: Admin.name, schema: AdminSchema },
     ]),
     MulterModule.register({
       storage: diskStorage({
         destination: './uploads',
-        filename: (req, file, cb) => {
+        filename: (file, cb) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, uniqueSuffix + extname(file.originalname));
