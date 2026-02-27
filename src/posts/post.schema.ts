@@ -21,7 +21,7 @@ export class Post extends Document {
 
   @Prop({ type: Types.ObjectId, ref: 'Admin', required: false })
   admin?: Types.ObjectId;
-  
+
   createdAt?: Date;
   updatedAt?: Date;
 }
