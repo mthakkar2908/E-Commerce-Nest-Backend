@@ -171,9 +171,10 @@ export class PostsService {
       email,
     };
 
-    // 🔥 Only update image if new file uploaded
     if (image) {
       updateData.imageUrl = `/uploads/${image.filename}`;
+    } else {
+      updateData.imageUrl = null;
     }
 
     const updatedPost = await this.postModel.findByIdAndUpdate(

@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Orders } from './orders.schema';
 import { Model } from 'mongoose';
 import { CreateOrderDTO } from './create-order.dto';
-import { User } from 'src/users/user.schema';
-import { Products } from 'src/products/products.schema';
-import { Admin } from 'src/admin/admin.schema';
+import { User } from '../../src/users/user.schema';
+import { Products } from '../../src/products/products.schema';
+import { Admin } from '../../src/admin/admin.schema';
 
 @Injectable()
 export class OrdersService {
