@@ -22,6 +22,7 @@ import { ContactModule } from './contact/contact.module';
 import { ChatModule } from './chat/chat.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ChatModule,
     CartModule,
     EmailSignupModule,
+    CategoryModule,
     PrivacyPolicyModule,
     TermsConditionsModule,
     ContactModule,

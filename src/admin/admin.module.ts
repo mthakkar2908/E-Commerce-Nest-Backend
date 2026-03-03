@@ -10,6 +10,7 @@ import { ProductsModule } from 'src/products/products.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { OrdersModule } from 'src/orders/orders.module';
 import { ContactModule } from 'src/contact/contact.module';
+import { CategoryModule } from 'src/category/category.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ContactModule } from 'src/contact/contact.module';
     PostsModule,
     OrdersModule,
     ContactModule,
+    CategoryModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

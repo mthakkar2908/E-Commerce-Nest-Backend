@@ -16,8 +16,34 @@ export class OrdersService {
     @InjectModel(Products.name) private productModel: Model<Products>,
   ) {}
 
-  async getAllOrders(): Promise<Orders[]> {
-    return this.orderModel.find().populate('product_id').exec();
+  async getAllOrders(
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: Orders[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+    const [orders, total] = await Promise.all([
+      this.orderModel
+        .find()
+        .sort({ order: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .populate('product_id')
+        .exec(),
+
+      this.orderModel.countDocuments(),
+    ]);
+
+    return {
+      data: orders,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async getTotalOrders(): Promise<number> {
@@ -70,28 +96,55 @@ export class OrdersService {
     return updateOrder;
   }
 
-  async searchOrders(search: string): Promise<Orders[]> {
-    if (!search || !search.trim()) {
-      return this.orderModel.find().populate('product_id').exec();
+  async searchOrders(
+    search: string,
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: Orders[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+
+    let filter = {};
+
+    if (search && search.trim()) {
+      const orConditions: Record<string, unknown>[] = [
+        { product_name: { $regex: search, $options: 'i' } },
+        { user_first_name: { $regex: search, $options: 'i' } },
+        { user_last_name: { $regex: search, $options: 'i' } },
+      ];
+
+      const numericSearch = Number(search);
+      if (!Number.isNaN(numericSearch)) {
+        orConditions.push(
+          { total_price: numericSearch },
+          { product_quan: numericSearch },
+        );
+      }
+
+      filter = { $or: orConditions };
     }
 
-    const orConditions: Record<string, unknown>[] = [
-      { product_name: { $regex: search, $options: 'i' } },
-      { user_first_name: { $regex: search, $options: 'i' } },
-      { user_last_name: { $regex: search, $options: 'i' } },
-    ];
+    const [orders, total] = await Promise.all([
+      this.orderModel
+        .find(filter)
+        .sort({ order: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .populate('product_id')
+        .exec(),
 
-    const numericSearch = Number(search);
-    if (!Number.isNaN(numericSearch)) {
-      orConditions.push(
-        { total_price: numericSearch },
-        { product_quan: numericSearch },
-      );
-    }
+      this.orderModel.countDocuments(filter),
+    ]);
 
-    return this.orderModel
-      .find({ $or: orConditions })
-      .populate('product_id')
-      .exec();
+    return {
+      data: orders,
+      total,
+      page,
+      pageSize,
+    };
   }
 }

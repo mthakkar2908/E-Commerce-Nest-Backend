@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDTO } from './dto/create-admin.dto';
 import { SignInAdminDTO } from './dto/sign-in.dto';
@@ -18,6 +10,7 @@ import { ContactService } from 'src/contact/contact.service';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { CategoryService } from 'src/category/category.service';
 
 dayjs.extend(relativeTime);
 
@@ -30,6 +23,7 @@ export class AdminController {
     private readonly postService: PostsService,
     private readonly orderService: OrdersService,
     private readonly contactService: ContactService,
+    private readonly categoryService: CategoryService,
   ) {}
 
   @Post()
@@ -57,11 +51,14 @@ export class AdminController {
     const totalPosts = await this.postService.getTotalPosts();
     const totalOrders = await this.orderService.getTotalOrders();
     const totalContactForms = await this.contactService.getTotalContactForms();
+    const totalCategoris = await this.categoryService.getTotalCategories();
+
     const lastUser = await this.userService.getLastUser();
     const lastOrder = await this.orderService.getLastOrder();
     const lastPost = await this.postService.getLastPosts();
     const lastContact = await this.contactService.getLastContact();
     const lastProduct = await this.productService.getLastProduct();
+    const lastCategories = await this.categoryService.getLastCategories();
 
     return {
       totalUsers: total,
@@ -69,6 +66,7 @@ export class AdminController {
       totalPosts: totalPosts,
       totalOrders: totalOrders,
       totalContactForms: totalContactForms,
+      totalCategoris: totalCategoris,
       lastUserAdded: lastUser ? dayjs(lastUser.createdAt).fromNow() : null,
       lastOrderAdded: lastOrder ? dayjs(lastOrder.createdAt).fromNow() : null,
       lastPostAdded: lastPost ? dayjs(lastPost.createdAt).fromNow() : null,
@@ -77,6 +75,9 @@ export class AdminController {
         : null,
       lastProductAdded: lastProduct
         ? dayjs(lastProduct.createdAt).fromNow()
+        : null,
+      lastCategoriesAdded: lastCategories
+        ? dayjs(lastCategories.createdAt).fromNow()
         : null,
     };
   }
