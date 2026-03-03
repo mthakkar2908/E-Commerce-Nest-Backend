@@ -53,11 +53,32 @@ export class EmailSignupService {
     };
   }
 
-  async findAll(): Promise<EmailSignup[]> {
-    return this.emailSignupModel
+  async findAll(
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: EmailSignup[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+
+    const total = await this.emailSignupModel.countDocuments();
+
+    const data = await this.emailSignupModel
       .find()
       .populate('userId', 'name email profile_image')
+      .skip(skip)
+      .limit(pageSize)
       .exec();
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async sendInviteMail(email: string) {

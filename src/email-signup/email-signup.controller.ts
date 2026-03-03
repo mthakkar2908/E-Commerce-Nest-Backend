@@ -12,8 +12,8 @@ export class EmailSignupController {
   }
 
   @Get()
-  findAll() {
-    return this.emailSignupService.findAll();
+  findAll(@Query('page') page: number, @Query('pageSize') pageSize: number) {
+    return this.emailSignupService.findAll(page, pageSize);
   }
 
   @Get('get-emails')

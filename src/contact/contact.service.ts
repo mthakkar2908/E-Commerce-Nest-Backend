@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact } from './contact.schema';
-import { ContactDTO } from './contact.dto';
+import { ContactDTO, UpdateContactDTO } from './contact.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
@@ -47,28 +47,78 @@ export class ContactService {
     return this.contactModel.find().countDocuments();
   }
 
-  async getContactForms(): Promise<Contact[]> {
-    return this.contactModel.find().exec();
+  async getContactForms(
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: Contact[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+    const [contacts, total] = await Promise.all([
+      this.contactModel
+        .find()
+        .sort({ order: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .exec(),
+      this.contactModel.countDocuments(),
+    ]);
+
+    return {
+      data: contacts,
+      total,
+      page,
+      pageSize,
+    };
+  }
+
+  async searchContacts(
+    search: string,
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: Contact[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
+
+    const filter = search
+      ? {
+          $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { email: { $regex: search, $options: 'i' } },
+            { title: { $regex: search, $options: 'i' } },
+            { mobile_no: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } },
+          ],
+        }
+      : {};
+
+    const [contacts, total] = await Promise.all([
+      this.contactModel
+        .find(filter)
+        .sort({ createdAt: -1 }) 
+        .skip(skip)
+        .limit(pageSize)
+        .exec(),
+      this.contactModel.countDocuments(filter),
+    ]);
+
+    return {
+      data: contacts,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async getLastContact() {
     return this.contactModel.findOne().sort({ createdAt: -1 }).exec();
-  }
-
-  async searchContacts(search: string): Promise<Contact[]> {
-    if (!search) {
-      return this.contactModel.find().exec();
-    }
-
-    return this.contactModel.find({
-      $or: [
-        { name: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { title: { $regex: search, $options: 'i' } },
-        { mobile_no: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-      ],
-    });
   }
 
   async deleteContactForm(id: string): Promise<{
@@ -101,7 +151,7 @@ export class ContactService {
       };
   }
 
-  async update(contactDTO: ContactDTO) {
+  async update(contactDTO: UpdateContactDTO) {
     const { id, name, email, title, mobile_no, description } = contactDTO;
 
     if (!id) {

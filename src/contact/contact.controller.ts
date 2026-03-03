@@ -8,7 +8,7 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
-import { ContactDTO } from './contact.dto';
+import { ContactDTO, UpdateContactDTO } from './contact.dto';
 import { ContactService } from './contact.service';
 @Controller('contact')
 export class ContactController {
@@ -20,20 +20,30 @@ export class ContactController {
   }
 
   @Put('updateContact')
-  update(@Body() dto: ContactDTO) {
+  update(@Body() dto: UpdateContactDTO) {
     return this.contactService.update(dto);
   }
 
   @Get('/form')
-  getContactForms() {
-    return this.contactService.getContactForms();
+  async getContactForms(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ) {
+    return this.contactService.getContactForms(Number(page), Number(pageSize));
   }
 
   @Get('search')
-  async search(@Query('q') query: string) {
-    return this.contactService.searchContacts(query);
+  async search(
+    @Query('q') query: string,
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    return this.contactService.searchContacts(
+      query,
+      Number(page),
+      Number(pageSize),
+    );
   }
-
   @Delete('/deleteContact/:id')
   deleteContactForm(@Param('id') id: string) {
     return this.contactService.deleteContactForm(id);
