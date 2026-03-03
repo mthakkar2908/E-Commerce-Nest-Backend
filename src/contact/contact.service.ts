@@ -102,7 +102,7 @@ export class ContactService {
     const [contacts, total] = await Promise.all([
       this.contactModel
         .find(filter)
-        .sort({ createdAt: -1 }) 
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(pageSize)
         .exec(),
