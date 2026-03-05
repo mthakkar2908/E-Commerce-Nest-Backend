@@ -37,6 +37,11 @@ export class CategoryController {
     return this.categoryService.getCategories(Number(page), Number(pageSize));
   }
 
+  @Get('/getAllCategories')
+  async getAllCategories() {
+    return this.categoryService.getAllCategories();
+  }
+
   @Delete('deleteCategory/:id')
   async deleteCategory(@Param('id') id: string) {
     return this.categoryService.deleteCategory(id);

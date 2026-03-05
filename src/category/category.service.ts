@@ -48,6 +48,10 @@ export class CategoryService {
     return this.categoryModel.find().countDocuments();
   }
 
+  async getAllCategories(): Promise<Category[]> {
+    return this.categoryModel.find().exec();
+  }
+
   async getLastCategories() {
     return this.categoryModel.findOne().sort({ createdAt: -1 }).exec();
   }

@@ -17,4 +17,7 @@ export class CreateProductDTO {
 
   @IsOptional()
   is_fav?: boolean;
+
+  @IsNotEmpty({ message: 'Category Id is required' })
+  category_id: string;
 }

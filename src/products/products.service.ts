@@ -1,13 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Products } from './products.schema';
-import { FilterQuery, isValidObjectId, Model } from 'mongoose';
+import { FilterQuery, isValidObjectId, Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateProductDTO } from './create-product.dto';
+import { Category } from 'src/category/category.schema';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel(Products.name) private productModel: Model<Products>,
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
   ) {}
 
   async findAllProducts(
@@ -27,6 +33,7 @@ export class ProductService {
         .sort({ order: 1 })
         .skip(skip)
         .limit(pageSize)
+        .populate('category_id', 'name')
         .exec(),
       this.productModel.countDocuments(),
     ]);
@@ -45,7 +52,12 @@ export class ProductService {
   async fineProductById(id: string): Promise<Products | null> {
     return this.productModel.findById(id).exec();
   }
-
+  async findProductByCategoryId(cat_id: string): Promise<Products[]> {
+    return this.productModel
+      .find({ category_id: new Types.ObjectId(cat_id) })
+      .populate('category_id', 'name')
+      .exec();
+  }
   async getLastProduct() {
     return this.productModel.findOne().sort({ createdAt: -1 }).exec();
   }
@@ -70,6 +82,7 @@ export class ProductService {
     price: number,
     quan: number,
     is_fav: boolean | undefined,
+    category_id: string,
   ): Promise<Products> {
     const newProduct = new this.productModel({
       name,
@@ -77,7 +90,15 @@ export class ProductService {
       price,
       quan,
       is_fav,
+      category_id,
     });
+
+    const findCategory = await this.categoryModel.findById(category_id);
+
+    if (!findCategory) {
+      throw new NotFoundException('Category Not found');
+    }
+
     return newProduct.save();
   }
 
@@ -99,7 +120,7 @@ export class ProductService {
     const query: FilterQuery<Products> = {};
 
     if (!search?.trim()) {
-      return this.productModel.find().exec();
+      return this.productModel.find().populate('category_id', 'name').exec();
     }
 
     const orConditions: any[] = [];
@@ -116,7 +137,7 @@ export class ProductService {
 
     query.$or = orConditions;
 
-    return this.productModel.find(query).exec();
+    return this.productModel.find(query).populate('category_id', 'name').exec();
   }
 
   async toggleFavorite(productId: string) {

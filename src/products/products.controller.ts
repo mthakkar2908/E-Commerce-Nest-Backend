@@ -52,6 +52,13 @@ export class ProductsController {
     return this.productService.searchProducts(q);
   }
 
+  @Get('category/:cat_id')
+  async getProductsByCategory(
+    @Param('cat_id') cat_id: string,
+  ): Promise<Products[]> {
+    return this.productService.findProductByCategoryId(cat_id);
+  }
+
   @Get(':id')
   fineProductById(@Param('id') id: string) {
     try {
@@ -84,6 +91,7 @@ export class ProductsController {
       body.price,
       body.quan,
       body.is_fav,
+      body.category_id,
     );
 
     return {
