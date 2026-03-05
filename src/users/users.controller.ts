@@ -55,7 +55,7 @@ export class UsersController {
     }
   }
 
-  @Post('updateProdile/:id')
+  @Post('updateProfile/:id')
   @UseInterceptors(FileInterceptor('image'))
   async updateProdile(
     @Param('id') id: string,

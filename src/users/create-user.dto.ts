@@ -1,14 +1,8 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  Matches,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches, MinLength } from 'class-validator';
 
 export class CreateUserDTO {
-  @IsOptional()
-  name?: string;
+  @IsNotEmpty({ message: 'Name is required' })
+  name: string;
 
   @IsEmail({}, { message: 'Email must be valid' })
   @IsNotEmpty({ message: 'Email is required' })
