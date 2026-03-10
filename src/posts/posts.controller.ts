@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './create-post.dto';
@@ -22,9 +23,9 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  findAll() {
+  findAll(@Query('page') page = 1, @Query('pageSize') pageSize = 10) {
     try {
-      return this.postsService.findAll();
+      return this.postsService.findAll(page, pageSize);
     } catch (error) {
       throw new HttpException(
         {

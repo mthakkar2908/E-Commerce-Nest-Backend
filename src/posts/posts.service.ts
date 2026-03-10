@@ -36,15 +36,31 @@ export class PostsService {
     private dashboardGateway: DashboardGateway,
   ) {}
 
-  async findAll(): Promise<PostResponse[]> {
-    const posts = await this.postModel
-      .find()
-      .populate('user', 'name email profile_image')
-      .populate('admin', 'email')
-      .lean()
-      .exec();
+  async findAll(
+    page: number,
+    pageSize: number,
+  ): Promise<{
+    data: PostResponse[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> {
+    const skip = (page - 1) * pageSize;
 
-    return posts.map((post) => ({
+    const [posts, total] = await Promise.all([
+      this.postModel
+        .find()
+        .populate('user', 'name email profile_image')
+        .populate('admin', 'email')
+        .lean()
+        .skip(skip)
+        .limit(pageSize)
+        .exec(),
+
+      this.postModel.countDocuments(),
+    ]);
+
+    const data = posts.map((post) => ({
       _id: post._id.toString(),
       name: post.name,
       post_description: post.post_description,
@@ -68,6 +84,13 @@ export class PostsService {
             }
           : null,
     }));
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
   async getTotalPosts(): Promise<number> {
     return this.postModel.find().countDocuments();
