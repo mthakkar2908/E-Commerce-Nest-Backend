@@ -10,10 +10,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { DashboardModule } from 'src/gateway/dashboard.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    DashboardModule,
     MulterModule.register({
       storage: diskStorage({
         destination: './uploads/profile',

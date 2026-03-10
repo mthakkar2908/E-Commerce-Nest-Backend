@@ -11,6 +11,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Admin, AdminSchema } from 'src/admin/admin.schema';
+import { DashboardModule } from 'src/gateway/dashboard.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Admin, AdminSchema } from 'src/admin/admin.schema';
       { name: User.name, schema: UserSchema },
       { name: Admin.name, schema: AdminSchema },
     ]),
+    DashboardModule,
     MulterModule.register({
       storage: diskStorage({
         destination: './uploads',

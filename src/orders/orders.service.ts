@@ -6,6 +6,7 @@ import { CreateOrderDTO } from './create-order.dto';
 import { User } from 'src/users/user.schema';
 import { Products } from 'src/products/products.schema';
 import { Admin } from 'src/admin/admin.schema';
+import { DashboardGateway } from 'src/gateway/dashboard.gateway';
 
 @Injectable()
 export class OrdersService {
@@ -14,6 +15,7 @@ export class OrdersService {
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Admin.name) private adminModel: Model<Admin>,
     @InjectModel(Products.name) private productModel: Model<Products>,
+    private dashboardGetway: DashboardGateway,
   ) {}
 
   async getAllOrders(
@@ -63,10 +65,6 @@ export class OrdersService {
   async CreateOrder(createOrder: CreateOrderDTO): Promise<Orders> {
     const user = await this.userModel.findById(createOrder.user_id);
     const admin = await this.adminModel.findById(createOrder.user_id);
-
-    console.log('user ', user);
-    console.log('admin', admin);
-
     if (!user && !admin) {
       throw new BadRequestException('User Not found');
     }
@@ -77,7 +75,11 @@ export class OrdersService {
     }
 
     const newOrder = new this.orderModel(createOrder);
-    return newOrder.save();
+
+    await newOrder.save();
+
+    this.dashboardGetway.orderAdded(newOrder);
+    return newOrder;
   }
 
   async UpdateOrdder(

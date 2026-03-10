@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { Contact } from './contact.schema';
 import { ContactDTO, UpdateContactDTO } from './contact.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { DashboardGateway } from 'src/gateway/dashboard.gateway';
 
 @Injectable()
 export class ContactService {
@@ -15,6 +16,7 @@ export class ContactService {
     @InjectModel(Contact.name)
     private readonly contactModel: Model<Contact>,
     private readonly mailService: MailerService,
+    private dashboardGateway: DashboardGateway,
   ) {}
 
   async sendMail(
@@ -143,6 +145,8 @@ export class ContactService {
     if (savedContact) {
       await this.sendMail(email, name, mobile_no, title, description);
     }
+
+    this.dashboardGateway.contactAdded(savedContact);
 
     if (savedContact)
       return {

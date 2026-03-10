@@ -7,6 +7,7 @@ import { Post } from './post.schema';
 import { User } from 'src/users/user.schema';
 import type { File as MulterFile } from 'multer';
 import { Admin } from 'src/admin/admin.schema';
+import { DashboardGateway } from 'src/gateway/dashboard.gateway';
 
 interface PostUserResponse {
   _id: string;
@@ -32,6 +33,7 @@ export class PostsService {
     @InjectModel(Post.name) private postModel: Model<Post>,
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Admin.name) private adminModel: Model<Admin>,
+    private dashboardGateway: DashboardGateway,
   ) {}
 
   async findAll(): Promise<PostResponse[]> {
@@ -124,6 +126,7 @@ export class PostsService {
       throw new BadRequestException('Post creation failed');
     }
 
+    this.dashboardGateway.postAdded(createdPost);
     return {
       _id: populatedPost._id.toString(),
       name: populatedPost.name,

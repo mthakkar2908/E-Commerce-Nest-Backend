@@ -11,12 +11,14 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import type { File as MulterFile } from 'multer';
+import { DashboardGateway } from 'src/gateway/dashboard.gateway';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
+    private dashboardGateway: DashboardGateway,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -54,7 +56,17 @@ export class UsersService {
     password: string,
   ): Promise<User> {
     const newUser = new this.userModel({ name, email, password });
-    return newUser.save();
+
+    const isExist = await this.userModel.findOne({ email });
+    if (isExist) {
+      throw new BadRequestException('Email already Exist');
+    }
+
+    const savedUser = await newUser.save();
+
+    this.dashboardGateway.userAdded(savedUser);
+
+    return savedUser;
   }
 
   async signIn(

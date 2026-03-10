@@ -23,6 +23,7 @@ import { ChatModule } from './chat/chat.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryModule } from './category/category.module';
+import { DashboardGateway } from './gateway/dashboard.gateway';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { CategoryModule } from './category/category.module';
       },
     }),
   ],
+  providers: [DashboardGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

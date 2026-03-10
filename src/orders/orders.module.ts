@@ -6,6 +6,7 @@ import { Orders, OrderSchema } from './orders.schema';
 import { User, UserSchema } from 'src/users/user.schema';
 import { Products, ProductsSchema } from 'src/products/products.schema';
 import { Admin, AdminSchema } from 'src/admin/admin.schema';
+import { DashboardModule } from 'src/gateway/dashboard.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { Admin, AdminSchema } from 'src/admin/admin.schema';
       { name: Admin.name, schema: AdminSchema },
       { name: Products.name, schema: ProductsSchema },
     ]),
+    DashboardModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService],
