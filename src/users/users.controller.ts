@@ -15,7 +15,8 @@ import { SignInDTO } from './signIn.dto';
 import { UpdateUserDTO } from './update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { File as MulterFile } from 'multer';
-
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth('access-token')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
