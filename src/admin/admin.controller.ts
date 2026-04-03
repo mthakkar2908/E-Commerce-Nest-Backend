@@ -11,9 +11,11 @@ import { ContactService } from 'src/contact/contact.service';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CategoryService } from 'src/category/category.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 dayjs.extend(relativeTime);
 
+@ApiBearerAuth('access-token')
 @Controller('admin')
 export class AdminController {
   constructor(

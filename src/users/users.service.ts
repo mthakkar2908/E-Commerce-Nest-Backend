@@ -132,12 +132,12 @@ export class UsersService {
           image: updatedUser.profile_image,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof NotFoundException) {
         throw error;
       }
 
-      if (error?.code === 11000) {
+      if (error.code === 11000) {
         throw new BadRequestException('Email already exists');
       }
 

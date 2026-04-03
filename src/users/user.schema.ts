@@ -5,16 +5,16 @@ import { genSalt, hash } from 'bcrypt';
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true })
-  name: string;
+  name!: string;
 
   @Prop({ required: true })
-  email: string;
+  email!: string;
 
   @Prop({ required: true })
-  password: string;
+  password!: string;
 
   @Prop({ required: false })
-  profile_image: string;
+  profile_image!: string;
 
   @Prop()
   token?: string;
