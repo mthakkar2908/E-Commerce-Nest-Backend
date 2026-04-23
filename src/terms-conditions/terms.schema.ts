@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class TermsConditions extends Document {
   @Prop({ required: true })
-  TermsConditionsText: string;
+  TermsConditionsText!: string;
 }
 
 export const TermsConditionsSchema =

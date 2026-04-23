@@ -4,37 +4,37 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class Orders extends Document {
   @Prop({ required: true, ref: 'Products' })
-  product_id: string;
+  product_id!: string;
 
   @Prop({ required: true })
-  user_id: string;
+  user_id!: string;
 
   @Prop({ required: true })
-  user_first_name: string;
+  user_first_name!: string;
 
   @Prop({ required: true })
-  user_last_name: string;
+  user_last_name!: string;
 
   @Prop({ required: true })
-  product_name: string;
+  product_name!: string;
 
   @Prop({ required: true })
-  email: string;
+  email!: string;
 
   @Prop({ required: true })
-  status: string;
+  status!: string;
 
   @Prop({ required: true })
-  address: string;
+  address!: string;
 
   @Prop({ required: true })
-  mobile_no: number;
+  mobile_no!: number;
 
   @Prop({ required: true })
-  total_price: number;
+  total_price!: number;
 
   @Prop({ required: true })
-  product_quan: number;
+  product_quan!: number;
 
   createdAt?: Date;
   updatedAt?: Date;

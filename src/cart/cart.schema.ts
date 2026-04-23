@@ -4,7 +4,7 @@ import { Document, Types } from 'mongoose';
 @Schema({ timestamps: true })
 export class Cart extends Document {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  userId: Types.ObjectId;
+  userId!: Types.ObjectId;
 
   @Prop([
     {
@@ -12,7 +12,7 @@ export class Cart extends Document {
       quantity: { type: Number, required: true, default: 1 },
     },
   ])
-  items: {
+  items!: {
     productId: Types.ObjectId;
     quantity: number;
   }[];

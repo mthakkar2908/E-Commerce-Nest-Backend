@@ -22,7 +22,7 @@ interface UserSocketMap {
 })
 export class ChatGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private userSocketMap: UserSocketMap = {};
   private socketUserMap: { [socketId: string]: string } = {};

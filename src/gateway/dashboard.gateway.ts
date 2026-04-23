@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 })
 export class DashboardGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   userAdded(user: any) {
     this.server.emit('userAdded', user);

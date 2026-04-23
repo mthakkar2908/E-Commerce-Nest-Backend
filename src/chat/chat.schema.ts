@@ -5,32 +5,32 @@ import { Document, Types } from 'mongoose';
 export class Message extends Document {
   declare _id: Types.ObjectId;
   @Prop({ type: Types.ObjectId, required: true })
-  senderId: Types.ObjectId;
+  senderId!: Types.ObjectId;
 
   @Prop({ required: true })
-  senderName: string;
+  senderName!: string;
 
   @Prop({ type: Types.ObjectId, required: true })
-  recipientId: Types.ObjectId;
+  recipientId!: Types.ObjectId;
 
   @Prop({ required: true })
-  message: string;
+  message!: string;
 
   @Prop({ default: false })
-  isRead: boolean;
+  isRead!: boolean;
 
   @Prop({ default: new Date() })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Prop({ default: new Date() })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Prop({
     type: Map,
     of: [String],
     default: {},
   })
-  reactions: Map<string, string[]>;
+  reactions?: Map<string, string[]>;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

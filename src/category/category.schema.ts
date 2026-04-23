@@ -4,16 +4,16 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class Category extends Document {
   @Prop({ required: true, unique: true })
-  name: string;
+  name!: string;
 
   @Prop()
-  description: string;
+  description?: string;
 
   @Prop()
   image?: string;
 
   @Prop({ default: true })
-  isActive: boolean;
+  isActive?: boolean;
 
   createdAt?: Date;
   updatedAt?: Date;

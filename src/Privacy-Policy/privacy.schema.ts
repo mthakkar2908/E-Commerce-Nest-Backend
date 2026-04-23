@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class PrivacyPolicy extends Document {
   @Prop({ required: true })
-  PrivacyPolicyText: string;
+  PrivacyPolicyText!: string;
 }
 
 export const PrivacyPolicySchema = SchemaFactory.createForClass(PrivacyPolicy);

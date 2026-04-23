@@ -22,7 +22,7 @@ export class OrdersController {
   getAllOrders(@Query('page') page = 1, @Query('pageSize') pageSize = 10) {
     try {
       return this.orderService.getAllOrders(Number(page), Number(pageSize));
-    } catch (error) {
+    } catch (error: any) {
       throw new error();
     }
   }
@@ -43,7 +43,7 @@ export class OrdersController {
   getAllOrdersById(@Param('id') id: string) {
     try {
       return this.orderService.getOrdersById(id);
-    } catch (error) {
+    } catch (error: any) {
       throw new error();
     }
   }
@@ -52,7 +52,7 @@ export class OrdersController {
   deleteOrderById(@Param('id') id: string) {
     try {
       return this.orderService?.deleteOrderById(id);
-    } catch (error) {
+    } catch (error: any) {
       throw new error();
     }
   }
